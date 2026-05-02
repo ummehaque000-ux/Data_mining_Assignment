@@ -1,0 +1,41 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score, confusion_matrix
+
+
+# Step 1: Load dataset
+print("Loading Iris dataset...")
+iris = load_iris()
+X = iris.data
+y = iris.target
+
+# Step 2: Split data
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Step 3: Train KNN model
+print("Training KNN model...")
+model = KNeighborsClassifier(n_neighbors=5)
+model.fit(X_train, y_train)
+
+# Step 4: Predict
+y_pred = model.predict(X_test)
+
+# Step 5: Accuracy
+accuracy = accuracy_score(y_test, y_pred)
+print("Accuracy:", accuracy * 100)
+
+# Step 6: Show one sample prediction
+index = np.random.randint(0, len(X_test))
+single_pred = model.predict(X_test[index].reshape(1, -1))
+
+print("Predicted:", iris.target_names[single_pred[0]])
+print("Actual:", iris.target_names[y_test[index]])
+
+# Step 7: Confusion Matrix
+cm = confusion_matrix(y_test, y_pred)
+print("Confusion Matrix:\n", cm)
